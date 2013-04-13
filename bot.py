@@ -10,12 +10,17 @@ usrname    = config.usrname
 passwd     = config.passwd
 subreddit  = config.sub
 commentfoot= config.comment_footer
+debug	   = config.debug
 h		   = HTMLParser.HTMLParser()
 
 genderaskthreadmadethisweek = False
 
 def compare(a, b):
 	return (h.unescape(a) == h.unescape(b))	
+
+def debug(text):
+	if(debug == True):
+		print(text)
 
 def make_comment(post, message):
 	if(isinstance(post, praw.objects.Submission)):
@@ -46,7 +51,7 @@ def make_table(qa):
 
 def crawl():
 	#repeats every 5 min. put any and all code to comment and post here.
-	print("Starting crawl...")
+	debug("Starting crawl...")
 	
 	#Guys ask Girls and Girls ask Guys weekly thread
 	if(datetime.datetime.today().weekday() == 5 and datetime.datetime.today().hour() == 19 and genderaskthreadmadethisweek == False):
@@ -63,7 +68,7 @@ def crawl():
 	for submission in sub.get_new():
 		parse_submission(submission)
 	
-	print("Finished.")
+	debug("Finished.")
 	return
 
 def parse_comment(comment):

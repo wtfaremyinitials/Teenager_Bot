@@ -1,5 +1,6 @@
 sub     = "teenagers"
 usrname = "teenager_bot"
+debug	= False
 
 #get the bot password from parent directory ;)
 with open ("../passwd.txt", "r") as file:
