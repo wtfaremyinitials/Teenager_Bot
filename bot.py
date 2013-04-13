@@ -3,12 +3,16 @@ import config
 import responses
 import re
 import HTMLParser
+import datetime
+import time
 
 usrname    = config.usrname
 passwd     = config.passwd
 subreddit  = config.sub
 commentfoot= config.comment_footer
 h		   = HTMLParser.HTMLParser()
+
+genderaskthreadmadethisweek = False
 
 def compare(a, b):
 	return (h.unescape(a) == h.unescape(b))	
@@ -18,15 +22,15 @@ def make_comment(post, message):
 		#check if this comment has already been posted
 		for comment in post.comments:
 			if(compare(comment.body, message + commentfoot)):
-				print("Tried to make the same comment twice! Aborting!")
+				#print("Tried to make the same comment twice! Aborting!")
 				return
 		print("Commenting: \"" + message + "\" to the post titled: \"" + post.title + "\"")
-		submission.comment(message + commentfoot) 
+		post.add_comment(message + commentfoot) 
 	elif(isinstance(post, praw.objects.Comment)):
 		#check if this comment has already been posted
 		for reply in post.replies:
 			if(compare(reply.body, message + commentfoot)):
-				print("Tried to make the same comment twice! Aborting!")
+				#print("Tried to make the same comment: \"" + message + "\" twice! Aborting!")
 				return
 		print("Replying: \"" + message + "\" to the comment: \"" + post.body + "\"")
 		post.reply(message + commentfoot)
@@ -42,22 +46,34 @@ def make_table(qa):
 
 def crawl():
 	#repeats every 5 min. put any and all code to comment and post here.
+	print("Starting crawl...")
+	
+	#Guys ask Girls and Girls ask Guys weekly thread
+	if(datetime.datetime.today().weekday() == 5 and datetime.datetime.today().hour() == 19 and genderaskthreadmadethisweek == False):
+		create_gender_ask_thread()
+		genderaskthreadmadethisweek = True		
+	if(datetime.datetime.today().weekday() == 0):
+		genderaskthreadmadethisweek = False
 	
 	#go through subreddit comments
-	for comment in sub.get_comments:
+	for comment in sub.get_comments():
 		parse_comment(comment)
 	
+	#go through subreddit posts
 	for submission in sub.get_new():
 		parse_submission(submission)
 	
+	print("Finished.")
 	return
 
 def parse_comment(comment):
 	body = comment.body
-	translation = translate(body)
+	#translation
+	translation = "" #translate(body)
 	if(translation != ""):
-		make_comment(translation)
-	if(body == "/)"):
+		make_comment(comment, translation)
+	#um.. yeah
+	if((re.match("\s/\)", body) != None) or (body == "/)")):
 		make_comment(comment, "(\\")
 
 #deprecated	
@@ -67,9 +83,9 @@ def parse_comments_in_submission(submission):
 				
 def parse_submission(post):
 	#translation
-	translation = translate(post)
+	translation = translate(post.selftext)
 	if(translation != ""):
-		make_comment(translation)
+		make_comment(post, translation)
 	
 	#other things i might do to a post
 	
@@ -77,10 +93,9 @@ def translate(text):
 	comment = ""
 	#translate words
 	for key in responses.translator_words:
-		r = key
-		match = re.match(r, text, re.IGNORECASE)
-		if(match != None):
-			comment = comment + "\n\n > " + match + " \n\n " + responses.translator_words[key]
+		match = text.find(key+"")
+		if(match != -1):
+			comment = comment + "\n\n > " + key + " \n\n " + responses.translator_words[key]
 	#regex for US to UK year conversion.
 	
 	return comment			
@@ -102,4 +117,6 @@ print("Selecting subreddit /r/" + subreddit)
 sub = r.get_subreddit(subreddit)
 print("Done.")
 
-parse_comments_in_submission(sub.get_new(limit=1).next())
+while (True):
+	crawl()
+	time.sleep(60)
