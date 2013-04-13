@@ -1,4 +1,4 @@
-sub     = "teenagers"
+sub     = "test"
 usrname = "teenager_bot"
 
 #get the bot password from parent directory ;)

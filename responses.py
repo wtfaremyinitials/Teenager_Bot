@@ -148,3 +148,31 @@ girls_ask_guys  = {
 
 }
 
+translator_words = {
+
+"SAT":
+"For those of us not in the US, The SAT is a U.S. standardized test similar to the GSCE.",
+
+"PSAT":
+"For those of us not in the US, The PSAT is usually taken a year before the real SAT. The SAT is a U.S. standardized test similar to the GSCE.",
+
+"ACT":
+"For those of us not in the US, The ACT is a U.S. standardized test similar to the GSCE.",
+
+"GSCE":
+"For those of us not in the UK, The GSCE is a standardized test similar to the SAT and ACT.",
+
+"A levels":
+"For those of us not in the UK, \"A levels\" are similar to Advanced or Honors level classes.",
+
+"College":
+"In the US college is A place of higher education where you can gain a degree (bachelor's, master's, PhD). Different types - Community, state & private. \n\n While in the UK college is A place of higher education where you can gain a vocational qualification and/or A levels, not a degree. \"Colleges\" are usually for those going into manual jobs (electrician, plumber, builder)",
+
+"Soccer":
+"For those of us not in the U.S., Soccer is the U.S. name for \"Football\". Not to be confused with U.S. \"[Football](http://en.wikipedia.org/wiki/American_football)\", which is very different.",
+
+"Football":
+"In the U.S. \"[Football](http://en.wikipedia.org/wiki/American_football)\" is a game with an odd shaped ball that is thrown. \n\n Everywhere else in the world, \"[Football](http://en.wikipedia.org/wiki/Football)\" is a game where a round shaped ball is kicked. They are VERY different.",
+
+}
+
